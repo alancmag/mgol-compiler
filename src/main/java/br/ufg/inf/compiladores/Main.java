@@ -17,7 +17,7 @@ public class Main {
         } while(!token.classe.equals(Classe.$)); */
 
         Parser parser = new Parser();
-        parser.parseFonte("fontes/fonte_sem_erros_comentario.alg");
+        parser.parseFonte("fontes/fonte_sem_erros_minimo.alg");
 
     }
 }
