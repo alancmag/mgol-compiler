@@ -5,7 +5,10 @@ import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Stack;
 import com.google.common.collect.Table;
+
+import br.ufg.inf.compiladores.lexico.Alfabeto;
 import br.ufg.inf.compiladores.lexico.Scanner;
+import br.ufg.inf.compiladores.lexico.Tipo;
 import br.ufg.inf.compiladores.lexico.Token;
 
 public class Parser {
@@ -32,7 +35,7 @@ public class Parser {
             estadoAtual = pilha.peek();
             simbolo = token.classe.toString();
             acao = tabela.get(estadoAtual,simbolo);
-            System.out.println("Pilha: " + pilha + " | Simbolo: " + simbolo + " || Acao: " + acao);
+            //System.out.println("Pilha: " + pilha + " | Simbolo: " + simbolo + " || Acao: " + acao);
             if (acao instanceof Shift) 
             {
                 Shift t = (Shift) acao;
@@ -48,15 +51,17 @@ public class Parser {
                 }
                 estadoAtual = pilha.peek();
                 acao = tabela.get(estadoAtual, regra.ladoEsquerdo);
+                
                 if(acao instanceof Goto){
                     Goto acaoGoto = (Goto) acao;
                     Integer gotoEstado = acaoGoto.getEstadoGoto();
                     pilha.push(gotoEstado);
+                    System.out.println("Acao: " + t + " | Regra: " + regra);
+                    
                 }
                 else {
-                    System.out.println(regra);
-                    System.out.println("ERROR GOTO ="+acao );
                     System.out.println("DEU ERRO NO GOTO!!!");
+                    System.out.println(acao + "\n" + regra + "\nSimbolo: " + simbolo);
                     return;
                 }
             } 
@@ -67,14 +72,28 @@ public class Parser {
             } 
             else 
             {
-                System.out.println("ERROR="+token );
                 System.out.println("DEU ERRO DE ACTION!!!");
+                System.out.println(acao + "\nSimbolo: " + simbolo);
+                trataErro(estadoAtual, token, (Error) acao);
                 return;
 
             }
         }
     }
 
+
+    private void trataErro(Integer estadoAtual, Token token, Error erro){
+
+        if(erro.numero >= 1 && erro.numero <= 24){
+           //Esperado ler inicio
+            System.out.println("TOKEN ESPERADO: ["+ Tipo.inicio + "] mas encontrado o Token = ["+ token + "] na linha " + scanner.getLinha() + " e coluna "+ scanner.getColuna());
+        }
+        else{
+
+             System.out.println( token + " não era esperado na linha " + scanner.getLinha() + " e coluna "+ scanner.getColuna());
+        }
+
+    }
 
     
 }

@@ -60,7 +60,7 @@ public class Gramatica {
                             action = new Accept();
                             break;
                         default:
-                            action = new Error();
+                            action = new Error(Integer.parseInt(acaoString.substring(1, acaoString.length())));
                     }
 
                 }
@@ -68,7 +68,7 @@ public class Gramatica {
                     // Simbolo Não terminal
                     switch (acaoString.charAt(0)) {
                         case 'E':
-                            action = new Error();
+                            action = new Error(Integer.parseInt(acaoString.substring(1, acaoString.length())));
                             break;
                         default:
                             action = new Goto(Integer.parseInt(acaoString));
