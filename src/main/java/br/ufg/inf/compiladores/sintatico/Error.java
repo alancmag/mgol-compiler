@@ -7,6 +7,6 @@ public class Error extends Action {
 
     @Override
     public String toString() {
-         return "ERRO - Numero erro: " + numero;
+         return "ERRO SINTATICO - Numero erro: " + numero;
     }
 }

@@ -1,5 +1,5 @@
-teste inicio
+inicio
 varinicio
 varfim;
-escreva ; "teste";
+escreva "teste"
 fim

@@ -12,6 +12,7 @@ public class Scanner {
     public List<Token> tabelaDeSimbolos = new ArrayList<>();
     private Estado estadoAtual;
     private Estado estadoInicial;
+    private boolean houveErro = false;
 
     public int getLinha() {
         return linha;
@@ -19,6 +20,10 @@ public class Scanner {
 
     public int getColuna() {
         return coluna;
+    }
+
+    public boolean houveErroLexico(){
+       return houveErro;
     }
 
     private int linha;
@@ -158,6 +163,9 @@ public class Scanner {
                     }
                 }
                 // System.out.println(token);
+                if(token.classe.equals(Classe.error)){
+                    houveErro = true;
+                }
                 return token;
             }
         }
