@@ -18,6 +18,6 @@ public class Main {
 
         Parser parser = new Parser();
         parser.parseFonte("fontes/fonte_sem_erros.alg");
-
+        
     }
 }
