@@ -101,11 +101,11 @@ public class Scanner {
                         case "q1":
                         case "q4":
                         case "q5":
-                            if (!simbolo.isParteAlfabeto) {
+                            if (!simbolo.isParteAlfabeto && !simbolo.isFinalArquivo) {
                                 System.out.println("ERRO LÉXICO - Caractere '" + simbolo
                                         + "' inválido na Linguagem presente na formação no Número Real '" + lexema
                                         + "' na linha " + linha + ", coluna " + coluna);
-                            } else if (simbolo.equals(Alfabeto.EOF)) {
+                            } else if (simbolo.isFinalArquivo) {
                                 System.out
                                         .println("ERRO LÉXICO - FIM DE ARQUIVO encontrado na formação do Número Real '"
                                                 + lexema + "' na linha " + linha + ", coluna " + coluna);
@@ -117,11 +117,11 @@ public class Scanner {
                             break;
                         case "q2":
                         case "q3":
-                            if (!simbolo.isParteAlfabeto) {
+                            if (!simbolo.isParteAlfabeto && !simbolo.isFinalArquivo) {
                                 System.out.println("ERRO LÉXICO - Caractere '" + simbolo
                                         + "' inválido na Linguagem presente na formação no Número Inteiro '" + lexema
                                         + "' na linha " + linha + ", coluna " + coluna);
-                            } else if (simbolo.equals(Alfabeto.EOF)) {
+                            } else if (simbolo.isFinalArquivo) {
                                 System.out.println(
                                         "ERRO LÉXICO - FIM DE ARQUIVO encontrado na formação do Número Inteiro '"
                                                 + lexema + "' na linha " + linha + ", coluna " + coluna);
@@ -132,11 +132,11 @@ public class Scanner {
                             }
                             break;
                         case "q6":
-                            if (!simbolo.isParteAlfabeto) {
+                            if (!simbolo.isParteAlfabeto && !simbolo.isFinalArquivo) {
                                 System.out.println("ERRO LÉXICO - Caractere '" + simbolo
                                         + "' inválido na Linguagem presente na formação do Literal '" + lexema
                                         + "' na linha " + linha + ", coluna " + coluna);
-                            } else if (simbolo.equals(Alfabeto.EOF)) {
+                            } else if (simbolo.isFinalArquivo) {
                                 System.out.println("ERRO LÉXICO - FIM DE ARQUIVO encontrado na formação do Literal '"
                                         + lexema + "' na linha " + linha + ", coluna " + coluna);
                             } else {
@@ -146,11 +146,11 @@ public class Scanner {
                             }
                             break;
                         case "q7":
-                            if (!simbolo.isParteAlfabeto) {
+                            if (!simbolo.isParteAlfabeto && !simbolo.isFinalArquivo) {
                                 System.out.println("ERRO LÉXICO - Caractere '" + simbolo
                                         + "' inválido na Linguagem presente na formação do Comentário na linha " + linha
                                         + ", coluna " + coluna);
-                            } else if (simbolo.equals(Alfabeto.EOF)) {
+                            } else if (simbolo.isFinalArquivo) {
                                 System.out.println(
                                         "ERRO LÉXICO - FIM DE ARQUIVO encontrado na formação do Comentário na linha "
                                                 + linha + ", coluna " + coluna);
@@ -162,11 +162,17 @@ public class Scanner {
                             break;
                     }
                 }
+
                 // System.out.println(token);
                 if(token.classe.equals(Classe.error)){
                     houveErro = true;
+                    limpaVariaveis();
                 }
-                return token;
+                else {
+                    // Se não é erro retorna o token valido, caso contrário vai rodar de novo a busca por outro token valido.
+                    return token;
+                }
+
             }
         }
         // nunca chega aqui
