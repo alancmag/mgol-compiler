@@ -28,13 +28,12 @@ public class Parser {
     public Parser() throws IOException {
         regras = Gramatica.getListRegrasGramatica("definicoes/GRAMATICA_MGOL.TXT", Charset.defaultCharset());
         tabela = Gramatica.getTabelaActionGoto("definicoes/TABELA_ACTION_GOTO_UNICA.csv", Charset.defaultCharset());
-        fonte_objeto = "#include<stdio.h> \n" + 
+        fonte_objeto = "#include<stdio.h>\n" + 
                 "typedef char literal[256];\n" +
                 "void main(void)\n" + 
-                "{\n" + 
-                "/*----Variaveis temporarias----*/\n"; 
+                "{\t/*----Variaveis temporarias----*/\n"; 
 
-        fonte_objeto = "";
+        fonte_objeto = ""; //TODO REMOVER ISSO AQUI
     }
 
     public void parseFonte(String pathArquivoFonte) throws IOException {
@@ -104,7 +103,7 @@ public class Parser {
                 // consome o token
                 token = scanner.scanner();
             }
-            System.out.println(pilha_semantica);
+            //System.out.println(pilha_semantica);
         }
     }
 
@@ -115,16 +114,15 @@ public class Parser {
         switch(numeroRegra){
             case 5:
                 fonte_objeto += "\n\n\n";
-                break;  
+                break;
             case 6:
-                // (A) Amarração de atributos, organizar a passagem de valores do atributo TIPO.tipo, para L.TIPO;
-                
-                
+                // finaliza a declaracao de um tipo de variaveis
+                fonte_objeto += ";\n";
                 break;
             case 7:   
             case 8:
+            // logica pra declaracao de 1 ou mais IDs
                 Iterator<Token> itr = pilha_semantica.iterator();
-                itr.next(); // Pular o varinicio
                 while (itr.hasNext()) {
                     Token tok = itr.next();
                     if(tok.classe == Classe.id || tok.classe == Classe.vir  ){
@@ -134,12 +132,8 @@ public class Parser {
                     }
                     itr.remove();
                 }
-                if(pilha_semantica.size() == 1 && !fonte_objeto.endsWith(";\n")){
-                    fonte_objeto += ";\n";
-                }
                 break;  
             case 9:
-                // 
                 tipo = Tipo.inteiro;
                 fonte_objeto += " int ";
                 pilha_semantica.remove(pilha_semantica.size()-2);
@@ -151,7 +145,7 @@ public class Parser {
                 break;  
             case 11:
                 tipo = Tipo.literal;
-                fonte_objeto += " " + Tipo.literal + " ";
+                fonte_objeto += " literal ";
                 pilha_semantica.remove(pilha_semantica.size()-2);
 
                 break;                  
