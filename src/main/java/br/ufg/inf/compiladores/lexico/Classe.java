@@ -1,8 +1,5 @@
 package br.ufg.inf.compiladores.lexico;
 
-import java.util.Arrays;
-import java.util.stream.Stream;
-
 public enum Classe {
 
     num("num"),

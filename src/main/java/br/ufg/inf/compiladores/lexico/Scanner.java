@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Scanner {
-    public List<Token> tabelaDeSimbolos = new ArrayList<>();
+    public ArrayList<Token> tabelaDeSimbolos = new ArrayList<>();
     private Estado estadoAtual;
     private Estado estadoInicial;
     private boolean houveErro = false;

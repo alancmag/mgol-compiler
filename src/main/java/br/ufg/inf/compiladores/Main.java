@@ -16,8 +16,14 @@ public class Main {
             System.out.println(token);
         } while(!token.classe.equals(Classe.$)); */
 
+        // T2 FUNCIONANDO
         Parser parser = new Parser();
-        parser.parseFonte("fontes/fonte_sem_erros.alg");
-        
+        parser.parseFonte("fontes/fonte_sem_erros.alg");  
+
+
+
+
+
+
     }
 }

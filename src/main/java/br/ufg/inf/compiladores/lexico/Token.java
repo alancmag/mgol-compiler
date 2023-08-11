@@ -18,9 +18,9 @@ public class Token {
 
     @Override
     public String toString() {
-        return  "Classe: " + classe +
+        return  "|Classe: " + classe +
                 ", Lexema: " + lexema +
-                ", Tipo: " + tipo ;
+                ", Tipo: " + tipo + "|" ;
     }
 
     @Override
