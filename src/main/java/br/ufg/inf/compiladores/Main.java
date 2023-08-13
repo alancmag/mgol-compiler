@@ -18,6 +18,7 @@ public class Main {
 
         // T2 FUNCIONANDO
         Parser parser = new Parser();
+        //parser.parseFonte("fontes/fonte_sem_erros_minimo.alg");  
         parser.parseFonte("fontes/fonte_sem_erros.alg");  
 
 

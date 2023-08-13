@@ -114,21 +114,21 @@ public class Parser {
         switch(numeroRegra){
             case 5:
                 fonte_objeto += "\n\n\n";
+
                 break;
             case 6:
                 // finaliza a declaracao de um tipo de variaveis
-                fonte_objeto += ";\n";
+                fonte_objeto += ";\n"; 
                 break;
             case 7:   
             case 8:
-            // logica pra declaracao de 1 ou mais IDs
+                // logica pra declaracao de 1 ou mais IDs na lista de variaveis
                 Iterator<Token> itr = pilha_semantica.iterator();
                 while (itr.hasNext()) {
                     Token tok = itr.next();
                     if(tok.classe == Classe.id || tok.classe == Classe.vir  ){
                         tok.tipo = tipo;
                         fonte_objeto += " " + tok.lexema;
-                        
                     }
                     itr.remove();
                 }
@@ -148,7 +148,42 @@ public class Parser {
                 fonte_objeto += " literal ";
                 pilha_semantica.remove(pilha_semantica.size()-2);
 
-                break;                  
+                break;  
+            case 13:
+                
+                
+                fonte_objeto += " REGRA 13 \n";
+                //pilha_semantica.remove(pilha_semantica.size()-2);
+
+                break;  
+            case 15:
+                
+                
+                fonte_objeto += " REGRA 15 \n";
+                //pilha_semantica.remove(pilha_semantica.size()-2);
+
+                break;     
+                        case 16:
+                
+                
+                fonte_objeto += " REGRA 16 \n";
+                //pilha_semantica.remove(pilha_semantica.size()-2);
+
+                break; 
+                        case 17:
+                
+                
+                fonte_objeto += " REGRA 17 \n";
+                //pilha_semantica.remove(pilha_semantica.size()-2);
+
+                break;   
+                            case 18:
+                
+                
+                fonte_objeto += " REGRA 18 \n";
+                //pilha_semantica.remove(pilha_semantica.size()-2);
+
+                break;                    
             default:
             System.out.println("entrou aqui!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                 break;
