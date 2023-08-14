@@ -28,7 +28,6 @@ public class Parser {
     LinkedList<String> pilha_semantica_repita;
     LinkedList<Token> listaVariaveisTemporarias;
     int variaveisTemporarias;
-    private boolean variaveisJaProcessadas;
     private boolean houveErroSemantico;
     private int qtdTabs;
     Token tx,oprd2,opm,oprd1,id,ld,opr;
@@ -37,12 +36,11 @@ public class Parser {
         
     }
 
-    public void parseFonte(String pathArquivoFonte) throws IOException {
+    public void parseFonte(String pathArquivoFonte,String pathArquivoDestino) throws IOException {
         regras = Gramatica.getListRegrasGramatica("definicoes/GRAMATICA_MGOL.TXT", Charset.defaultCharset());
         tabela = Gramatica.getTabelaActionGoto("definicoes/TABELA_ACTION_GOTO_UNICA.csv", Charset.defaultCharset());
         fonte_objeto = "";
 
-        variaveisJaProcessadas = false;
         houveErroSemantico = false;
         houveErroSintatico = false;
         variaveisTemporarias = 0;
@@ -70,7 +68,6 @@ public class Parser {
                 simbolo = token.classe.toString();
                 
                 if(token.classe == Classe.varfim){
-                    variaveisJaProcessadas = true;
                 } else if( token.classe == Classe.id 
                         || token.classe == Classe.num 
                         || token.classe == Classe.lit
@@ -107,13 +104,15 @@ public class Parser {
 
                     switch(tk.tipo){
                         case literal:
-                        fonte_objeto_final += tk.tipo + " " + tk.lexema +";\n";
+                            fonte_objeto_final += tk.tipo + " " + tk.lexema +";\n";
                             break;
                         case inteiro:
                             fonte_objeto_final += "int " + tk.lexema +";\n";
                             break;
                         case real:
                             fonte_objeto_final += "double " + tk.lexema +";\n";
+                            break;
+                        
                     }
                 }
                 fonte_objeto_final += "/*------------------------------*/\n";
@@ -149,7 +148,6 @@ public class Parser {
                 simbolo = token.classe.toString();
                 
                 if(token.classe == Classe.varfim){
-                    variaveisJaProcessadas = true;
                 } else if( token.classe == Classe.id 
                         || token.classe == Classe.num 
                         || token.classe == Classe.lit
@@ -168,7 +166,6 @@ public class Parser {
             case 5:
                 fonte_objeto += "\n\n";
                 pilha_semantica.clear();
-                variaveisJaProcessadas = true;
                 break;
             case 6:
                 // finaliza a declaracao de um tipo de variaveis
@@ -299,7 +296,7 @@ public class Parser {
             
                 if( oprd1.tipo != oprd2.tipo || oprd1.tipo == Tipo.literal || oprd2.tipo == Tipo.literal ){
                     houveErroSemantico = true;
-                    System.out.println("Erro5: Operandos com tipos incompatíveis na linha "
+                    System.out.println("Erro5: Operandos ("+oprd1.lexema + " e "+ oprd2.lexema +") com tipos ("+oprd1.tipo+""+ oprd2.tipo+") incompatíveis na linha "
                     + scanner.getLinha() + " e coluna " + scanner.getColuna());
                 }
                 break;    
@@ -308,7 +305,7 @@ public class Parser {
                 tx = pilha_semantica.peekLast();
                 break;   
             case 22:
-                if(pilha_semantica.get(pilha_semantica.size()-2).tipo == Tipo.NULO){
+                if(pilha_semantica.get(pilha_semantica.size()-2).tipo == Tipo.NULO && pilha_semantica.get(pilha_semantica.size()-2).classe == Classe.id){
                     houveErroSemantico = true;
                     System.out.println("Erro4: Variável "+pilha_semantica.get(pilha_semantica.size()-2).lexema 
                     +" não declarada encontrada na linha "
@@ -329,20 +326,52 @@ public class Parser {
                 opr = pilha_semantica.removeLast();
                 oprd1 = pilha_semantica.removeLast();
                 
-                declaracaoTx = "T"+ variaveisTemporarias +" = "
-                + oprd1.lexema + opr.lexema + oprd2.lexema +";\n";
+                switch(opr.lexema){
+                    case "=":
+                        if((oprd1.tipo == Tipo.inteiro && oprd2.tipo == Tipo.inteiro ) || (oprd1.tipo == Tipo.real && oprd2.tipo == Tipo.real )){
+                            declaracaoTx = "T"+ variaveisTemporarias +" = "
+                            + oprd1.lexema + "==" + oprd2.lexema +";\n";
+                            tx = new Token(Classe.num,"T"+variaveisTemporarias,oprd1.tipo);
+                        } else {
+                            houveErroSemantico = true;
+                            System.out.println("Erro18: Operandos ("+oprd1.lexema + " e "+ oprd2.lexema +") com tipos ("+oprd1.tipo+" e "+ oprd2.tipo+") incompatíveis na linha "
+                            + scanner.getLinha() + " e coluna " + scanner.getColuna());
+                            tx = new Token(Classe.error,"T"+variaveisTemporarias,Tipo.NULO);
+                        }
+                        break;
+                    case "<>":
+                        if((oprd1.tipo == Tipo.inteiro && oprd2.tipo == Tipo.inteiro ) || (oprd1.tipo == Tipo.real && oprd2.tipo == Tipo.real )){
+                            declaracaoTx = "T"+ variaveisTemporarias +" = "
+                            + oprd1.lexema + "!=" + oprd2.lexema +";\n";
+                            tx = new Token(Classe.num,"T"+variaveisTemporarias,oprd1.tipo);
+                        } else {
+                            houveErroSemantico = true;
+                            System.out.println("Erro19: Operandos ("+oprd1.lexema + " e "+ oprd2.lexema +") com tipos ("+oprd1.tipo+" e "+ oprd2.tipo+") incompatíveis na linha "
+                            + scanner.getLinha() + " e coluna " + scanner.getColuna());
+                            tx = new Token(Classe.error,"T"+variaveisTemporarias,Tipo.NULO);
+                        }
+                        break;
+                    default:
+                        if((oprd1.tipo == Tipo.inteiro && oprd2.tipo == Tipo.inteiro ) || (oprd1.tipo == Tipo.real && oprd2.tipo == Tipo.real )){
+                            declaracaoTx = "T"+ variaveisTemporarias +" = "
+                            + oprd1.lexema + opr.lexema + oprd2.lexema +";\n";
+                            tx = new Token(Classe.num,"T"+variaveisTemporarias,oprd1.tipo);
+                        } else {
+                            houveErroSemantico = true;
+                            System.out.println("Erro20: Operandos ("+oprd1.lexema + " e "+ oprd2.lexema +") com tipos ("+oprd1.tipo+" e "+ oprd2.tipo+") incompatíveis na linha "
+                            + scanner.getLinha() + " e coluna " + scanner.getColuna());
+                            tx = new Token(Classe.error,"T"+variaveisTemporarias,Tipo.NULO);
+                        }
+                        
+                    break;
+                }
                     
-                tx = new Token(Classe.num,"T"+variaveisTemporarias,oprd1.tipo);
                 variaveisTemporarias++; 
                 listaVariaveisTemporarias.addLast(tx);
                     
                 pilha_semantica.addLast(tx);
                 fonte_objeto += Strings.repeat("\t", qtdTabs) +  declaracaoTx;
-                if( oprd1.tipo != oprd2.tipo){
-                    houveErroSemantico = true;
-                    System.out.println("Erro8: Operandos com tipos incompatíveis na linha "
-                    + scanner.getLinha() + " e coluna " + scanner.getColuna());
-                }
+                
                 break;
             case 34:
                 fonte_objeto += Strings.repeat("\t", qtdTabs) +  "while ("+tx.lexema+") {\n";

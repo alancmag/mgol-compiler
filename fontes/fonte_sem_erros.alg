@@ -7,23 +7,23 @@ inteiro E,F;
 real G;
 real H,TESTE;
 varfim;
-escreva "Digite A: ";
+escreva "\nDigite A: ";
 leia A;
 escreva A;
-escreva "Digite D: ";
+escreva "\nDigite D: ";
 leia D;
 escreva D;
-escreva "Digite G: ";
+escreva "\nDigite G: ";
 leia G;
 escreva G;
 se(D>2)
 entao
 	se(D<=22)
 	entao
-		escreva "D esta entre 2 e 22\n";
+		escreva "\nD esta entre 2 e 22\n";
 	fimse
 fimse
-escreva "valor de G=";
+escreva "\nvalor de G=";
 escreva G;
 escreva "\n";
 repita (G>0.1)
@@ -34,19 +34,22 @@ se(G>3.0)
 entao
 se(G<=9.0)
 entao
-escreva "G esta entre 3.0 e 9.0\n";
+escreva "\nG esta entre 3.0 e 9.0\n";
 fimse
 fimse
 G<-G-1.0;
 fimrepita
 G<-10.0;
 repita (G>0.1)
-escreva "DIGITE UM NUMERO REAL MENOR QUE 0.1 PARA SAIR DO LOOP\n";
+escreva "\nDIGITE UM NUMERO REAL MENOR QUE 0.1 PARA SAIR DO LOOP\n";
 leia G;
 se(G>0.1) entao
-escreva "Voce digitou um numero MAIOR que o ESPERADO\n";
+escreva "\nVoce digitou um numero MAIOR que o ESPERADO\n";
 fimse
 G<-G-1.5;
 fimrepita
-escreva "FINALIZOU\n";
+se(D=D) entao 
+escreva "\nD=D\n";
+fimse
+escreva "\nFINALIZOU\n";
 fim
