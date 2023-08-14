@@ -6,9 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
@@ -49,6 +47,7 @@ public class Gramatica {
                 Action action;
                 if ( Classe.isTerminal(simbolo) ){
                     //Simbolo Terminal
+                    //System.out.println(" acao string" +acaoString);
                     switch (acaoString.charAt(0)) {
                         case 's':
                             action = new Shift(Integer.parseInt(acaoString.substring(1, acaoString.length())));

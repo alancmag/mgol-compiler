@@ -2,7 +2,6 @@ package br.ufg.inf.compiladores;
 
 import java.io.IOException;
 
-import br.ufg.inf.compiladores.lexico.*;
 import br.ufg.inf.compiladores.sintatico.*;
  
 public class Main {
@@ -18,8 +17,10 @@ public class Main {
 
         // T2 FUNCIONANDO
         Parser parser = new Parser();
-        //parser.parseFonte("fontes/fonte_sem_erros_minimo.alg");  
-        parser.parseFonte("fontes/fonte_sem_erros.alg");  
+        parser.parseFonte
+        //("fontes/fonte_sem_erros_minimo.alg");  
+        //parser.parseFonte
+        ("fontes/fonte_sem_erros.alg");  
 
 
 

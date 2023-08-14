@@ -1,12 +1,8 @@
 package br.ufg.inf.compiladores.lexico;
 
 public enum Tipo {
-    INTEIRO("INTEIRO"),
-    REAL("REAL"),
-    LITERAL("LITERAL"),
     NULO("NULO"),
-    NUM("NUM"),
-    ID("ID"), 
+    ID("ID"),
     OPR("OPR"), 
     RCB("RCB"), 
     OPM("OPM"), 
@@ -27,8 +23,29 @@ public enum Tipo {
     fim("fim"), 
     inteiro("inteiro"), 
     literal("literal"), 
-    real("real"); 
+    real("real");
 
+    /*/Nao terminais da linguagem
+    ARG("ARG"),
+    LD("LD"),
+    OPRD("OPRD"),
+    TIPO("TIPO"),
+    P("P"),
+    V("V"),
+    LV("LV"),
+    D("D"),
+    L ("L"),
+    A("A"),
+    ES("ES"),
+    CMD("CMD"),
+    COND ("COND"),
+    CAB("CAB"),
+    EXP_R("EXP_R"),
+    CP("CP"),
+    R("R"),
+    CABR ("CABR"),
+    CPR("CPR")
+    ;*/
     private String descricao;
 
     Tipo(String descricao) {

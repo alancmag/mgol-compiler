@@ -6,7 +6,6 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.List;
 
 public class Scanner {
     public ArrayList<Token> tabelaDeSimbolos = new ArrayList<>();
@@ -234,17 +233,17 @@ public class Scanner {
         estadoInicial = q0;
 
         Estado EOF = new Estado("EOF", false, true, false, Classe.$, Tipo.NULO);
-        Estado INT1 = new Estado("INT1", false, true, true, Classe.num, Tipo.INTEIRO);
+        Estado INT1 = new Estado("INT1", false, true, true, Classe.num, Tipo.inteiro);
         Estado q1 = new Estado("q1", false, false, false, Classe.error, Tipo.NULO);
         Estado q2 = new Estado("q2", false, false, false, Classe.error, Tipo.NULO);
         Estado q3 = new Estado("q3", false, false, false, Classe.error, Tipo.NULO);
-        Estado REAL1 = new Estado("REAL1", false, true, true, Classe.num, Tipo.REAL);
-        Estado INT2 = new Estado("INT2", false, true, false, Classe.num, Tipo.INTEIRO);
+        Estado REAL1 = new Estado("REAL1", false, true, true, Classe.num, Tipo.real);
+        Estado INT2 = new Estado("INT2", false, true, false, Classe.num, Tipo.inteiro);
         Estado q4 = new Estado("q4", false, false, false, Classe.error, Tipo.NULO);
         Estado q5 = new Estado("q5", false, false, false, Classe.error, Tipo.NULO);
-        Estado REAL2 = new Estado("REAL2", false, true, false, Classe.num, Tipo.REAL);
+        Estado REAL2 = new Estado("REAL2", false, true, false, Classe.num, Tipo.real);
         Estado q6 = new Estado("q6", false, false, false, Classe.error, Tipo.NULO);
-        Estado LIT = new Estado("LIT", false, true, false, Classe.lit, Tipo.LITERAL);
+        Estado LIT = new Estado("LIT", false, true, false, Classe.lit, Tipo.literal);
         Estado OPM = new Estado("OPM", false, true, false, Classe.opm, Tipo.NULO);
         Estado ID = new Estado("ID", false, true, false, Classe.id, Tipo.NULO);
         Estado q7 = new Estado("q7", false, false, false, Classe.error, Tipo.NULO);

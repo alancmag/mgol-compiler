@@ -1,5 +1,6 @@
 inicio
 varinicio
 varfim;
-escreva "teste";
+leia A;
+leia B;
 fim
