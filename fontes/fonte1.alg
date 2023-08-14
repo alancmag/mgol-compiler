@@ -1,26 +1,5 @@
-"d"@
-inicio!@#$%¨&*()
-{numeros inteiros e reais}@
-10
-22e30
-33E44
-55.0e66
-66.1E77
-
-22e+30
-33E+44
-55.0e+66
-66.1E+77
-
-22e-30
-33E-44
-55.0e-66
-66.1E-77
-
-22e--30
-33E-+44
-55.0e-+66
-66.1E--77
+inicio
+{numeros inteiros e reais}
 
 {teste     !@#$%¨&*()   comentario}
 {teste ,.;/!@#$%¨&*()\ comentario-+=<>:}
@@ -30,7 +9,7 @@ inicio!@#$%¨&*()
         inteiro D;
         real C ;
         {teste comentario2}
-        10e
+         
     varfim;
     escreva "@#Digite B:";
     leia B;
