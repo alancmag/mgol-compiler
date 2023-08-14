@@ -9,16 +9,19 @@ real H,TESTE;
 varfim;
 escreva "Digite A: ";
 leia A;
+escreva A;
 escreva "Digite D: ";
 leia D;
+escreva D;
 escreva "Digite G: ";
 leia G;
+escreva G;
 se(D>2)
 entao
-se(D<=22)
-entao
-escreva "D esta entre 2 e 22\n";
-fimse
+	se(D<=22)
+	entao
+		escreva "D esta entre 2 e 22\n";
+	fimse
 fimse
 escreva "valor de G=";
 escreva G;

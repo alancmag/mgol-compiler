@@ -8,6 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.Table;
 
 import br.ufg.inf.compiladores.lexico.*;
@@ -29,7 +30,7 @@ public class Parser {
     int variaveisTemporarias;
     private boolean variaveisJaProcessadas;
     private boolean houveErroSemantico;
-    private boolean contextoRepita;
+    private int qtdTabs;
     Token tx,oprd2,opm,oprd1,id,ld,opr;
     String declaracaoTx;
     public Parser() throws IOException {
@@ -45,8 +46,7 @@ public class Parser {
         houveErroSemantico = false;
         houveErroSintatico = false;
         variaveisTemporarias = 0;
-        contextoRepita = false;
-
+        qtdTabs = 0;
         pilha = new Stack<>();
         pilha.push(Integer.valueOf(0));
         pilha_semantica  = new LinkedList<Token>();
@@ -68,10 +68,6 @@ public class Parser {
                 pilha.push(t.getEstadoShift());
                 token = scanner.scanner();
                 simbolo = token.classe.toString();
-                
-                if(token.classe == Classe.repita){
-                    contextoRepita = true;
-                }
                 
                 if(token.classe == Classe.varfim){
                     variaveisJaProcessadas = true;
@@ -106,7 +102,7 @@ public class Parser {
                 "typedef char literal[256];\n" +
                 "void main(void)\n" + 
                 "{/*----Variaveis temporarias----*/\n"; 
-                //fonte_objeto += "\n}\n";
+                //fonte_objeto += Strings.repeat("\t", qtdTabs) +  "\n}\n";
                 for (Token tk : listaVariaveisTemporarias) {
 
                     switch(tk.tipo){
@@ -151,10 +147,6 @@ public class Parser {
                 // consome o token
                 token = scanner.scanner();
                 simbolo = token.classe.toString();
-
-                if(token.classe == Classe.repita){
-                    contextoRepita = true;
-                }
                 
                 if(token.classe == Classe.varfim){
                     variaveisJaProcessadas = true;
@@ -174,7 +166,7 @@ public class Parser {
     public void regraSemantica(int numeroRegra, String naoTerminal){
         switch(numeroRegra){
             case 5:
-                //fonte_objeto += "\n\n\n";
+                fonte_objeto += "\n\n";
                 pilha_semantica.clear();
                 variaveisJaProcessadas = true;
                 break;
@@ -184,9 +176,18 @@ public class Parser {
                 Iterator<Token> itr = pilha_semantica.iterator();
                 while (itr.hasNext()) {
                     Token tok = itr.next();
+
+                    if(tok.tipo != Tipo.NULO){
+                        //variavel já foi declarada antes
+                        houveErroSemantico = true;
+                        System.out.println("Erro11: Variável "+tok.lexema + " na linha "
+                        + scanner.getLinha() + " e coluna " + scanner.getColuna()
+                        +" já foi declarada anteriormente.");
+                    }
+
                     if(tok.classe == Classe.id || tok.classe == Classe.vir  ){
                         tok.tipo = tipo;
-                        fonte_objeto += tok.lexema;
+                        fonte_objeto +=  tok.lexema;
                     }
                     itr.remove();
                 }
@@ -194,27 +195,27 @@ public class Parser {
                 break;
             case 9:
                 tipo = Tipo.inteiro;
-                fonte_objeto += "int ";
+                fonte_objeto += Strings.repeat("\t", qtdTabs) +  "int ";
                 break;  
             case 10:
                 tipo = Tipo.real;
-                fonte_objeto += "double ";
+                fonte_objeto += Strings.repeat("\t", qtdTabs) +  "double ";
                 break;  
             case 11:
                 tipo = Tipo.literal;
-                fonte_objeto += "literal ";
+                fonte_objeto += Strings.repeat("\t", qtdTabs) +  "literal ";
                 break;  
             case 13:    
                 Token id = pilha_semantica.removeLast();
                 switch(id.tipo){
                     case literal:
-                        fonte_objeto += "scanf (\"%s\","+ id.lexema+");\n";
+                        fonte_objeto += Strings.repeat("\t", qtdTabs) +  "scanf (\"%s\","+ id.lexema+");\n";
                         break;
                     case inteiro:
-                        fonte_objeto += "scanf (\"%d\",&"+ id.lexema+");\n";
+                        fonte_objeto += Strings.repeat("\t", qtdTabs) +  "scanf (\"%d\",&"+ id.lexema+");\n";
                         break;
                     case real:
-                        fonte_objeto += "scanf (\"%lf\",&"+ id.lexema+");\n";
+                        fonte_objeto += Strings.repeat("\t", qtdTabs) +  "scanf (\"%lf\",&"+ id.lexema+");\n";
                         break;
                     default:
                         houveErroSemantico = true;
@@ -229,16 +230,16 @@ public class Parser {
                 switch(arg.tipo){
                     case literal:
                         if(arg.classe == Classe.id){
-                            fonte_objeto += "printf (\"%s\","+ arg.lexema+");\n";
+                            fonte_objeto += Strings.repeat("\t", qtdTabs) +  "printf (\"%s\","+ arg.lexema+");\n";
                         } else {
-                            fonte_objeto += "printf ("+ arg.lexema+");\n";
+                            fonte_objeto += Strings.repeat("\t", qtdTabs) +  "printf ("+ arg.lexema+");\n";
                         }
                         break;
                     case inteiro:
-                        fonte_objeto += "printf (\"%d\","+ arg.lexema+");\n";
+                        fonte_objeto += Strings.repeat("\t", qtdTabs) +  "printf (\"%d\","+ arg.lexema+");\n";
                         break;
                     case real:
-                        fonte_objeto += "printf (\"%lf\","+ arg.lexema+");\n";
+                        fonte_objeto += Strings.repeat("\t", qtdTabs) +  "printf (\"%lf\","+ arg.lexema+");\n";
                         break;
                     default:
                         houveErroSemantico = true;
@@ -277,7 +278,7 @@ public class Parser {
                     + scanner.getLinha() + " e coluna " + scanner.getColuna());
                 }
                 else if( tx.tipo == id.tipo ){
-                    fonte_objeto += id.lexema + "="+ tx.lexema +";\n";
+                    fonte_objeto += Strings.repeat("\t", qtdTabs) +  id.lexema + "="+ tx.lexema +";\n";
                 } else {
                     houveErroSemantico = true;
                     System.out.println("Erro6:  Tipos diferentes para atribuição na linha "
@@ -289,7 +290,7 @@ public class Parser {
                 opm = pilha_semantica.removeLast();
                 oprd1 = pilha_semantica.removeLast();
                 
-                fonte_objeto += "T"+ variaveisTemporarias +" = "
+                fonte_objeto += Strings.repeat("\t", qtdTabs) +  "T"+ variaveisTemporarias +" = "
                 + oprd1.lexema + opm.lexema + oprd2.lexema +";\n";
                 tx = new Token(Classe.num,"T"+variaveisTemporarias,oprd1.tipo);
                 pilha_semantica.addLast(tx);
@@ -303,7 +304,7 @@ public class Parser {
                 }
                 break;    
             case 21:
-                //fonte_objeto += " REGRA 21 tem so uma atribuicao simples com 1 operador\n";
+                //fonte_objeto += Strings.repeat("\t", qtdTabs) +  " REGRA 21 tem so uma atribuicao simples com 1 operador\n";
                 tx = pilha_semantica.peekLast();
                 break;   
             case 22:
@@ -315,11 +316,13 @@ public class Parser {
                 }
                 break;    
              case 25:
-                fonte_objeto += "}\n";
+                qtdTabs--;
+                fonte_objeto += Strings.repeat("\t", qtdTabs) +  "}\n";
                 break;      
              case 26:
-                fonte_objeto += "if ("+tx.lexema+") {\n";
+                fonte_objeto += Strings.repeat("\t", qtdTabs) +  "if ("+tx.lexema+") {\n";
                 pilha_semantica.remove(tx);
+                qtdTabs++;
                 break;
             case 27:
                 oprd2 = pilha_semantica.removeLast();
@@ -334,42 +337,26 @@ public class Parser {
                 listaVariaveisTemporarias.addLast(tx);
                     
                 pilha_semantica.addLast(tx);
-                fonte_objeto += declaracaoTx;
+                fonte_objeto += Strings.repeat("\t", qtdTabs) +  declaracaoTx;
                 if( oprd1.tipo != oprd2.tipo){
                     houveErroSemantico = true;
                     System.out.println("Erro8: Operandos com tipos incompatíveis na linha "
                     + scanner.getLinha() + " e coluna " + scanner.getColuna());
                 }
-                
-                break;
-            case 32:
-                //fonte_objeto += " REGRA 32 \n";
-                break;
-            case 33:
-                //fonte_objeto += " REGRA 33 \n";
                 break;
             case 34:
-                //fonte_objeto += " REGRA 34 \n";
-                fonte_objeto += "while ("+tx.lexema+") {\n";
-                //pilha_semantica_repita.add(tx);
+                fonte_objeto += Strings.repeat("\t", qtdTabs) +  "while ("+tx.lexema+") {\n";
                 pilha_semantica.remove(tx);
                 pilha_semantica_repita.push(declaracaoTx); // colocar a declaracao do tx no topo da pilha do repita pra ser utilizada no fechamento do fimrepita
-                break;
-            case 35:
-                //fonte_objeto += " REGRA 35 \n";
-                break;
-            case 36:
-                //fonte_objeto += " REGRA 36 \n";
-                break;
-            case 37:
-                //fonte_objeto += " REGRA 37 \n";
+                qtdTabs++;
                 break;
             case 38:
-                fonte_objeto += pilha_semantica_repita.pollLast()+"}\n";
-                contextoRepita = false;
+                fonte_objeto += Strings.repeat("\t", qtdTabs) +  pilha_semantica_repita.pollLast()+"}\n";
+                qtdTabs--;
                 break;
             case 39:
-                fonte_objeto += "}\n";
+                fonte_objeto += Strings.repeat("\t", qtdTabs) + "}\n";
+                qtdTabs--;
                 break;
             default:
                 //System.out.println("entrou aqui! regra: "+numeroRegra);
