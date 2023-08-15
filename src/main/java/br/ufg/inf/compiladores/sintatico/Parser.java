@@ -121,8 +121,9 @@ public class Parser {
                 fonte_objeto_final += "/*------------------------------*/\n";
                 fonte_objeto_final += fonte_objeto;
                 //System.out.println("\n\n\n#############################################################\n\n");
+                BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(new File(pathArquivoDestino)));
+                bufferedWriter.write("");
                 if( !houveErroSemantico && !houveErroSintatico && !scanner.houveErroLexico()){
-                    BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(new File(pathArquivoDestino)));
                     bufferedWriter.write(fonte_objeto_final);
                     bufferedWriter.close();
 

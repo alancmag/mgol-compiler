@@ -12,8 +12,7 @@
             "type": "java",
             "name": "Current File",
             "request": "launch",
-            "mainClass": "${file}",
-            "args": "fontes/fonteT3.alg"
+            "mainClass": "${file}"
         },
         {
             "type": "java",
@@ -21,7 +20,7 @@
             "request": "launch",
             "mainClass": "br.ufg.inf.compiladores.Main",
             "projectName": "mgol-compiler",
-            "args": "fontes/fonteT3.alg"
+            "args": "fontes/fonteT3.alg programa.c"
         },
         {
             "type": "java",
@@ -29,7 +28,7 @@
             "request": "launch",
             "mainClass": "br.ufg.inf.compiladores.Main",
             "projectName": "mgol-compiler",
-            "args": "fontes/fonte_sem_erros.alg"
+            "args": "fontes/fonte_sem_erros.alg PROGRAMA.c"
         },
         {
             "name": "(gdb) Launch",
@@ -55,6 +54,32 @@
                     "ignoreFailures": true
                 }
             ]
+        },
+        {
+            "name": "C/C++: gcc.exe build and debug active file",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${fileDirname}\\${fileBasenameNoExtension}.exe",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${fileDirname}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "miDebuggerPath": "C:\\Program Files\\TDM-GCC\\bin\\gdb.exe",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "Set Disassembly Flavor to Intel",
+                    "text": "-gdb-set disassembly-flavor intel",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "C/C++: gcc.exe build active file"
         }
     ]
 }
