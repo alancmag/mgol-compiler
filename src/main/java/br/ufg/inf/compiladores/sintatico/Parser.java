@@ -40,6 +40,7 @@ public class Parser {
     }
 
     public void parseFonte(String pathArquivoFonte,String pathArquivoDestino) throws IOException {
+        // Inicializar as variaveis
         regras = Gramatica.getListRegrasGramatica("definicoes/GRAMATICA_MGOL.TXT", Charset.defaultCharset());
         tabela = Gramatica.getTabelaActionGoto("definicoes/TABELA_ACTION_GOTO_UNICA.csv", Charset.defaultCharset());
         fonte_objeto = "";
@@ -47,7 +48,7 @@ public class Parser {
         houveErroSemantico = false;
         houveErroSintatico = false;
         variaveisTemporarias = 0;
-        qtdTabs = 0;
+        qtdTabs = 0; //Controle de tabulacoes para ficar mais bonitinho o resultado
         pilha = new Stack<>();
         pilha.push(Integer.valueOf(0));
         pilha_semantica  = new LinkedList<Token>();
@@ -63,21 +64,22 @@ public class Parser {
             estadoAtual = pilha.peek();
             simbolo = token.classe.toString();
             acao = tabela.get(estadoAtual, simbolo);
-            //System.out.println("Pilha: " + pilha + " | Token: " + token + " || Acao: " + acao);
+            // Se quiser ver a execucao passo a passo do algoritmos Shift-Reduce com o estado da pilha a cada token
+            //System.out.println("Pilha: " + pilha + " | Token: " + token + " || Acao: " + acao); 
+            System.out.println("Token: " + token); 
             if (acao instanceof Shift) {
                 Shift t = (Shift) acao;
                 pilha.push(t.getEstadoShift());
                 token = scanner.scanner();
                 simbolo = token.classe.toString();
                 
-                if(token.classe == Classe.varfim){
-                } else if( token.classe == Classe.id 
-                        || token.classe == Classe.num 
-                        || token.classe == Classe.lit
-                        || token.classe == Classe.vir
-                        || token.classe == Classe.opm
-                        || token.classe == Classe.opr) {
-                            pilha_semantica.add(token);
+                if(token.classe == Classe.id 
+                || token.classe == Classe.num 
+                || token.classe == Classe.lit
+                || token.classe == Classe.vir
+                || token.classe == Classe.opm
+                || token.classe == Classe.opr) {
+                    pilha_semantica.add(token); // Pilha semantica pra ir salvando os tokens que precisamos no Semantico
                 }
 
             } else if (acao instanceof Reduce) {
@@ -92,8 +94,7 @@ public class Parser {
                 Goto acaoGoto = (Goto) acao;
                 Integer gotoEstado = acaoGoto.getEstadoGoto();
                 pilha.push(gotoEstado);
-                //System.out.println(t + " | " + regra);
-
+                //Aplicacao das regras semanticas da tratucao dirigida pela sintaxe
                 regraSemantica(regra.getNumero(), regra.ladoEsquerdo);
                 
             } else if (acao instanceof Accept) {
@@ -102,9 +103,9 @@ public class Parser {
                 "typedef char literal[256];\n" +
                 "void main(void)\n" + 
                 "{/*----Variaveis temporarias----*/\n"; 
-                //fonte_objeto += Strings.repeat("\t", qtdTabs) +  "\n}\n";
-                for (Token tk : listaVariaveisTemporarias) {
 
+                for (Token tk : listaVariaveisTemporarias) { 
+                    //Gerar as declaracoes das variaveis temporarias usadas no codigo conforme da definicao do trabalho
                     switch(tk.tipo){
                         case literal:
                             fonte_objeto_final += tk.tipo + " " + tk.lexema +";\n";
@@ -120,13 +121,13 @@ public class Parser {
                 }
                 fonte_objeto_final += "/*------------------------------*/\n";
                 fonte_objeto_final += fonte_objeto;
-                //System.out.println("\n\n\n#############################################################\n\n");
+
                 BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(new File(pathArquivoDestino)));
-                bufferedWriter.write("");
+                bufferedWriter.write(""); //Limpar o arquivo caso exista
                 if( !houveErroSemantico && !houveErroSintatico && !scanner.houveErroLexico()){
                     bufferedWriter.write(fonte_objeto_final);
                     bufferedWriter.close();
-
+                    //Se quiser ver o condigo fonte no terminal
                     //System.out.println(fonte_objeto_final);
                 }
                 return;
@@ -154,14 +155,15 @@ public class Parser {
                 token = scanner.scanner();
                 simbolo = token.classe.toString();
                 
-                if(token.classe == Classe.varfim){
-                } else if( token.classe == Classe.id 
-                        || token.classe == Classe.num 
-                        || token.classe == Classe.lit
-                        || token.classe == Classe.vir
-                        || token.classe == Classe.opm
-                        || token.classe == Classe.opr) {
-                            pilha_semantica.add(token);
+                if( token.classe == Classe.id 
+                    || token.classe == Classe.num 
+                    || token.classe == Classe.lit
+                    || token.classe == Classe.vir
+                    || token.classe == Classe.opm
+                    || token.classe == Classe.opr) {
+                        // Pilha semantica pra ir salvando os tokens que precisamos no Semantico 
+                        // (mesmo com erro pra tentar ir o mais longe nas verificacoes de erros)
+                        pilha_semantica.add(token); 
                 }
             }
             //System.out.println(pilha_semantica);
@@ -169,27 +171,38 @@ public class Parser {
     }
 
     public void regraSemantica(int numeroRegra, String naoTerminal){
+        //Aplicacoes das regras definidas no pdf do T3
         switch(numeroRegra){
             case 5:
                 fonte_objeto += "\n\n";
-                pilha_semantica.clear();
+                Iterator<Token> itr = pilha_semantica.iterator();
+                while (itr.hasNext()) {
+                    Token tok = itr.next();
+                    if(tok.classe != Classe.id 
+                    && tok.classe != Classe.num 
+                    && tok.classe != Classe.lit
+                    && tok.classe != Classe.vir
+                    && tok.classe != Classe.opm
+                    && tok.classe != Classe.opr) {
+                        itr.remove(); // remove os tokens de resquicio das declaracoes de variaveis
+                    }
+                } 
                 break;
             case 6:
                 // finaliza a declaracao de um tipo de variaveis
                 // logica pra declaracao de 1 ou mais IDs na lista de variaveis
-                Iterator<Token> itr = pilha_semantica.iterator();
+                itr = pilha_semantica.iterator();
                 while (itr.hasNext()) {
                     Token tok = itr.next();
 
                     if(tok.tipo != Tipo.NULO){
-                        //variavel já foi declarada antes
                         houveErroSemantico = true;
                         System.out.println("Erro11: Variável "+tok.lexema + " na linha "
                         + scanner.getLinha() + " e coluna " + scanner.getColuna()
                         +" já foi declarada anteriormente.");
                     }
 
-                    if(tok.classe == Classe.id || tok.classe == Classe.vir  ){
+                    if(tok.classe == Classe.id || tok.classe == Classe.vir  ){ //a virgula ta aqui por conveniencia pra imprimir ela no arquivo tmb xD(não me julgue)
                         tok.tipo = tipo;
                         fonte_objeto +=  tok.lexema;
                     }
@@ -269,11 +282,19 @@ public class Parser {
                 }
                 break;   
             case 19:
+                
+              
                 int idx_tx = pilha_semantica.indexOf(tx);
-                id = pilha_semantica.remove(idx_tx-1);
-                idx_tx = pilha_semantica.indexOf(tx);
-                tx = pilha_semantica.remove(idx_tx);
-                pilha_semantica.remove(tx);
+                if(idx_tx == -1){//veio de uma regra de apenas um operador na atribuicao (id ou num)
+                    id = pilha_semantica.pollFirst();
+                    tx = pilha_semantica.pollFirst();
+                } else {
+
+                    id = pilha_semantica.remove(idx_tx-1);
+                    idx_tx = pilha_semantica.indexOf(tx);
+                    tx = pilha_semantica.remove(idx_tx);
+                    pilha_semantica.remove(tx);
+                }
 
                 if(id.tipo == Tipo.NULO){
                     houveErroSemantico = true;
@@ -308,17 +329,25 @@ public class Parser {
                 }
                 break;    
             case 21:
-                //fonte_objeto += Strings.repeat("\t", qtdTabs) +  " REGRA 21 tem so uma atribuicao simples com 1 operador\n";
+                // REGRA 21 tem so uma atribuicao simples com 1 operador
                 tx = pilha_semantica.peekLast();
                 break;   
             case 22:
-                if(pilha_semantica.get(pilha_semantica.size()-2).tipo == Tipo.NULO && pilha_semantica.get(pilha_semantica.size()-2).classe == Classe.id){
+                if(pilha_semantica.size() == 1  && pilha_semantica.getFirst().tipo == Tipo.NULO && pilha_semantica.getFirst().classe == Classe.id){
                     houveErroSemantico = true;
-                    System.out.println("Erro4: Variável "+pilha_semantica.get(pilha_semantica.size()-2).lexema 
+                    System.out.println("Erro44: Variável "+pilha_semantica.get(pilha_semantica.size()-1).lexema 
+                    +" não declarada encontrada na linha "
+                    + scanner.getLinha() + " e coluna " + scanner.getColuna());
+                } else if(pilha_semantica.size() >=2 && pilha_semantica.get(pilha_semantica.size()-2).tipo == Tipo.NULO && pilha_semantica.get(pilha_semantica.size()-2).classe == Classe.id){
+                    houveErroSemantico = true;
+                    System.out.println("Erro45: Variável "+pilha_semantica.get(pilha_semantica.size()-2).lexema 
                     +" não declarada encontrada na linha "
                     + scanner.getLinha() + " e coluna " + scanner.getColuna());
                 }
                 break;    
+            case 23:
+                //tx = pilha_semantica.peekLast();
+                break;
              case 25:
                 qtdTabs--;
                 fonte_objeto += Strings.repeat("\t", qtdTabs) +  "}\n";

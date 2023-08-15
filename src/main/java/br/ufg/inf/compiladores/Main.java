@@ -2,24 +2,20 @@ package br.ufg.inf.compiladores;
 
 import java.io.IOException;
 
-import br.ufg.inf.compiladores.sintatico.*;
+import br.ufg.inf.compiladores.sintatico.Parser;
  
 public class Main {
     public static void main(String[] args) throws IOException {
-        /* T1 FUNCIONANDO
-         Scanner scanner = new Scanner("fontes/fonte_sem_erros_comentario.alg");
-        Token token;
-        do { token = scanner.scanner();
-             System.out.println(token);
-        } while(!token.classe.equals(Classe.$)); */
-        //if(args == null || args.length <1 || !args[0].endsWith(".alg")){
-        //    System.out.println("Programa fonte .alg obrigatótio.");
-        //    return;
-        //}
-        // T3 FUNCIONANDO
+        
+        if(args == null || args.length <1 || !args[0].endsWith(".alg")){
+            System.out.println("Caminho do programa fonte .alg de entrada é obrigatótio.\nEx. Main teste.alg MeuFonte.c");
+            return;
+        }
+        if(args.length < 2 || !args[1].endsWith(".c")){
+            System.out.println("Nome do programa destino .c obrigatótio.\nEx. Main teste.alg MeuFonte.c");
+            return;
+        }
         Parser parser = new Parser();
-        //parser.parseFonte("fontes/fonte_sem_erros.alg","");  
-        parser.parseFonte("fontes/fonteT3.alg","PROGRAMA.c");  
-        //parser.parseFonte(args[0],args[1]);  
+        parser.parseFonte(args[0],args[1]);  
     }
 }

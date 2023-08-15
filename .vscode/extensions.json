@@ -9,9 +9,7 @@
 		"redhat.java",
 		"vscjava.vscode-java-pack",
 		"vscjava.vscode-java-debug",
-		"ms-vscode.cpptools-extension-pack",
-		"danielpinto8zz6.c-cpp-compile-run",
-		"ms-vscode.cpptools"
+		"tomoki1207.pdf"
 	],
 	// List of extensions recommended by VS Code that should not be recommended for users of this workspace.
 	"unwantedRecommendations": [

@@ -7,13 +7,14 @@ inteiro E,F;
 real G;
 real H,TESTE;
 varfim;
-escreva "\nDigite A: ";
+G<-G-1.0;
+escreva "\nDigite Literal A: ";
 leia A;
 escreva A;
-escreva "\nDigite D: ";
+escreva "\nDigite Inteiro D: ";
 leia D;
 escreva D;
-escreva "\nDigite G: ";
+escreva "\nDigite Real G: ";
 leia G;
 escreva G;
 se(D>2)
@@ -44,7 +45,7 @@ repita (G>0.1)
 escreva "\nDIGITE UM NUMERO REAL MENOR QUE 0.1 PARA SAIR DO LOOP\n";
 leia G;
 se(G>0.1) entao
-escreva "\nVoce digitou um numero MAIOR que o ESPERADO\n";
+escreva "\nVoce digitou um numero MAIOR que o ESPERADO para sair\n";
 fimse
 G<-G-1.5;
 fimrepita

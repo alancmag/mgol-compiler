@@ -3,83 +3,40 @@
     "configurations": [
         {
             "type": "java",
-            "name": "Main",
+            "name": "Run Classe Main",
             "request": "launch",
             "mainClass": "br.ufg.inf.compiladores.Main",
             "projectName": "mgol-compiler"
         },
         {
             "type": "java",
-            "name": "Current File",
+            "name": "Run Current File",
             "request": "launch",
             "mainClass": "${file}"
         },
         {
             "type": "java",
-            "name": "Fonte T3",
+            "name": "Run Fonte Exemplo Completo Sem Erros",
             "request": "launch",
             "mainClass": "br.ufg.inf.compiladores.Main",
             "projectName": "mgol-compiler",
-            "args": "fontes/fonteT3.alg programa.c"
+            "args": "fontes_testes/fonte_sem_erros.alg programa_resultado.c"
         },
         {
             "type": "java",
-            "name": "Fonte Completo",
+            "name": "Run Fonte Exemplo Minimo Sem Erros",
             "request": "launch",
             "mainClass": "br.ufg.inf.compiladores.Main",
             "projectName": "mgol-compiler",
-            "args": "fontes/fonte_sem_erros.alg PROGRAMA.c"
+            "args": "fontes_testes/fonte_sem_erros_minimo.alg programa_resultado.c"
         },
         {
-            "name": "(gdb) Launch",
-            "type": "cppdbg",
+            "type": "java",
+            "name": "Run Fonte FIBONACCI",
             "request": "launch",
-            "program": "PROGRAMA.exe",
-            "args": [],
-            "stopAtEntry": false,
-            "cwd": "${fileDirname}",
-            "environment": [],
-            "externalConsole": false,
-            "MIMode": "gdb",
-            "miDebuggerPath": "/path/to/gdb",
-            "setupCommands": [
-                {
-                    "description": "Enable pretty-printing for gdb",
-                    "text": "-enable-pretty-printing",
-                    "ignoreFailures": true
-                },
-                {
-                    "description": "Set Disassembly Flavor to Intel",
-                    "text": "-gdb-set disassembly-flavor intel",
-                    "ignoreFailures": true
-                }
-            ]
-        },
-        {
-            "name": "C/C++: gcc.exe build and debug active file",
-            "type": "cppdbg",
-            "request": "launch",
-            "program": "${fileDirname}\\${fileBasenameNoExtension}.exe",
-            "args": [],
-            "stopAtEntry": false,
-            "cwd": "${fileDirname}",
-            "environment": [],
-            "externalConsole": false,
-            "MIMode": "gdb",
-            "miDebuggerPath": "C:\\Program Files\\TDM-GCC\\bin\\gdb.exe",
-            "setupCommands": [
-                {
-                    "description": "Enable pretty-printing for gdb",
-                    "text": "-enable-pretty-printing",
-                    "ignoreFailures": true
-                },
-                {
-                    "description": "Set Disassembly Flavor to Intel",
-                    "text": "-gdb-set disassembly-flavor intel",
-                    "ignoreFailures": true
-                }
-            ],
-            "preLaunchTask": "C/C++: gcc.exe build active file"
+            "mainClass": "br.ufg.inf.compiladores.Main",
+            "projectName": "mgol-compiler",
+            "args": "fontes_testes/fibonacci.alg programa_resultado_fibonacci.c"
         }
     ]
 }
