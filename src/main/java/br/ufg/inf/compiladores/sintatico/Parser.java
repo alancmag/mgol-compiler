@@ -1,5 +1,8 @@
 package br.ufg.inf.compiladores.sintatico;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -119,8 +122,11 @@ public class Parser {
                 fonte_objeto_final += fonte_objeto;
                 //System.out.println("\n\n\n#############################################################\n\n");
                 if( !houveErroSemantico && !houveErroSintatico && !scanner.houveErroLexico()){
+                    BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(new File(pathArquivoDestino)));
+                    bufferedWriter.write(fonte_objeto_final);
+                    bufferedWriter.close();
 
-                    System.out.println(fonte_objeto_final);
+                    //System.out.println(fonte_objeto_final);
                 }
                 return;
             } else {

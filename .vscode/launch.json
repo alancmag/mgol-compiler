@@ -1,7 +1,4 @@
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
         {
@@ -15,7 +12,49 @@
             "type": "java",
             "name": "Current File",
             "request": "launch",
-            "mainClass": "${file}"
+            "mainClass": "${file}",
+            "args": "fontes/fonteT3.alg"
+        },
+        {
+            "type": "java",
+            "name": "Fonte T3",
+            "request": "launch",
+            "mainClass": "br.ufg.inf.compiladores.Main",
+            "projectName": "mgol-compiler",
+            "args": "fontes/fonteT3.alg"
+        },
+        {
+            "type": "java",
+            "name": "Fonte Completo",
+            "request": "launch",
+            "mainClass": "br.ufg.inf.compiladores.Main",
+            "projectName": "mgol-compiler",
+            "args": "fontes/fonte_sem_erros.alg"
+        },
+        {
+            "name": "(gdb) Launch",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "PROGRAMA.exe",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${fileDirname}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "miDebuggerPath": "/path/to/gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "Set Disassembly Flavor to Intel",
+                    "text": "-gdb-set disassembly-flavor intel",
+                    "ignoreFailures": true
+                }
+            ]
         }
     ]
 }
